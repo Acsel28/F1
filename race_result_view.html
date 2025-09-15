@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race Result Stats</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto mt-10">
+        <h1 class="text-3xl font-bold mb-6">Race Result Stats</h1>
+       
+        <!-- Search Bar and Filter Form -->
+        <div class="mb-6 space-y-4">
+            <div class="flex space-x-4">
+                <input type="text" id="searchRaceName" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" placeholder="Search by Race Name">
+                <input type="text" id="searchDriverName" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" placeholder="Enter Driver Name">
+                <input type="text" id="searchTeamName" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" placeholder="Enter Team Name">
+            </div>
+           
+            <button onclick="filterRaceResults()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">Filter</button>
+        </div>
+
+        <div id="raceResultStats" class="space-y-4">
+            <!-- Dynamic Race Result data will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        let raceResults = [];
+
+        // Fetch Race Result data from the API
+        async function fetchRaceResults() {
+            try {
+                const response = await fetch('http://localhost:5000/race_result');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                raceResults = await response.json();
+                displayRaceResults(raceResults);
+            } catch (error) {
+                console.error('Error fetching Race Result data:', error);
+                alert('Failed to fetch Race Result data. Please try again later.');
+            }
+        }
+
+        // Display Race Result data
+        function displayRaceResults(filteredRaceResults) {
+            const raceResultStatsDiv = document.getElementById('raceResultStats');
+            raceResultStatsDiv.innerHTML = '';
+
+            filteredRaceResults.forEach(result => {
+                const resultDiv = document.createElement('div');
+                resultDiv.classList.add('bg-gray-800', 'p-4', 'rounded-md', 'mb-4');
+                resultDiv.innerHTML = `
+                    <h2 class="text-xl font-bold">${result.Race_Name}</h2>
+                    <p>Driver: ${result.Driver_Name}</p>
+                    <p>Team: ${result.Team_Name}</p>
+                    <p>Points: ${result.points}</p>
+                    <p>Driver of the Day: ${result.DOTD}</p>
+                    <p>Fastest Lap: ${result.Fastest_Lap}</p>
+                    <div class="flex space-x-2 mt-2">
+                        <button onclick="editRaceResult('${result.Result_ID}')" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded-md">Edit</button>
+                        <button onclick="deleteRaceResult('${result.Result_ID}')" class="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-md">Delete</button>
+                    </div>
+                `;
+                raceResultStatsDiv.appendChild(resultDiv);
+            });
+        }
+
+        // Delete Race Result
+        async function deleteRaceResult(resultID) {
+            const confirmDelete = confirm('Are you sure you want to delete this Race Result?');
+            if (confirmDelete) {
+                try {
+                    const response = await fetch(`http://localhost:5000/race_result/${resultID}`, {
+                        method: 'DELETE',
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to delete Race Result');
+                    }
+ // Refresh the Race Result list after deletion
+                    fetchRaceResults();
+                } catch (error) {
+                    console.error('Error deleting Race Result:', error);
+                    alert('Failed to delete Race Result. Please try again later.');
+                }
+            }
+        }
+
+        // Edit Race Result
+        function editRaceResult(resultID) {
+            console.log('Editing Result:', resultID); // Check the team name
+            localStorage.setItem('selectedRaceResultName', raceName);
+            window.location.href = `race_result_edit.html?name=${encodeURIComponent(raceName)}`;
+        }
+
+        // Filter function based on search input
+        function filterRaceResults() {
+            const raceNameFilter = document.getElementById('searchRaceName').value.toLowerCase();
+            const driverNameFilter = document.getElementById('searchDriverName').value.toLowerCase();
+            const teamNameFilter = document.getElementById('searchTeamName').value.toLowerCase();
+
+            const filteredRaceResults = raceResults.filter(result => {
+                const matchesRaceName = result.Race_Name.toLowerCase().includes(raceNameFilter);
+                const matchesDriverName = !driverNameFilter || result.Driver_Name.toLowerCase().includes(driverNameFilter);
+                const matchesTeamName = !teamNameFilter || result.Team_Name.toLowerCase().includes(teamNameFilter);
+
+                return matchesRaceName && matchesDriverName && matchesTeamName;
+            });
+
+            displayRaceResults(filteredRaceResults);
+        }
+
+        // Initial fetch of Race Result data
+        document.addEventListener('DOMContentLoaded', fetchRaceResults);
+    </script>
+</body>
+</html>

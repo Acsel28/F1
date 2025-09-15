@@ -1,0 +1,81 @@
+<html>
+<head>
+    <title>Add New Team Name</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto mt-10">
+        <h1 class="text-3xl font-bold mb-6">Add New Team</h1>
+        <form class="space-y-4" id="addTeamForm">
+            <div>
+                <label for="teamName" class="block text-sm font-medium">Team Name</label>
+                <input type="text" id="teamName" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter Team Name" required>
+            </div>
+            <div>
+                <label for="engineName" class="block text-sm font-medium">Engine Name</label>
+                <input type="text" id="engineName" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter Engine Name" required>
+            </div>
+            <div>
+                <label for="noOfChampionships" class="block text-sm font-medium">Number of Championships</label>
+                <input type="number" id="noOfChampionships" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter Number of Championships" required>
+            </div>
+            <div>
+                <label for="teamPrincipal" class="block text-sm font-medium">Team Principal</label>
+                <input type="text" id="teamPrincipal" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter Team Principal" required>
+            </div>
+            <div>
+                <label for="teamPoints" class="block text-sm font-medium">Team Points</label>
+                <input type="number" id="teamPoints" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter Team Points" required>
+            </div>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">Add Team</button>
+        </form>
+    </div>
+    
+    <script>
+        document.getElementById('addTeamForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+    
+            const teamName = document.getElementById('teamName').value;
+            const engineName = document.getElementById('engineName').value;
+            const noOfChampionships = document.getElementById('noOfChampionships').value;
+            const teamPrincipal = document.getElementById('teamPrincipal').value;
+            const teamPoints = document.getElementById('teamPoints').value;
+    
+            const teamData = {
+                Team_Name: teamName,
+                Engine_Name: engineName,
+                no_of_championships: noOfChampionships,
+                Team_Principal: teamPrincipal,
+                Team_Points: teamPoints
+            };
+    
+            try {
+                const response = await fetch('http://localhost:5000/team', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(teamData)
+                });
+    
+                if (response.ok) {
+                    alert('Team added successfully!');
+                    document.getElementById('addTeamForm').reset();
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error adding Team: ${errorData.message || 'Unknown error occurred.'}`);
+                }
+            } catch (error) {
+                alert(`An error occurred: ${error.message}`);
+            }
+        });
+    </script>
+</body>
+</html>

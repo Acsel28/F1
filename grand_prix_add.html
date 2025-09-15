@@ -1,0 +1,107 @@
+<html>
+<head>
+    <title>Add New Grand Prix</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto mt-10">
+        <h1 class="text-3xl font-bold mb-6">Add New Grand Prix</h1>
+        <form class="space-y-4" id="addGrandPrixForm">
+            <div>
+                <label for="raceName" class="block text-sm font-medium">Race Name</label>
+                <input type="text" id="raceName" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter race name" required>
+            </div>
+            <div>
+                <label for="raceType" class="block text-sm font-medium">Race Type</label>
+                <select id="raceType" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" required>
+                    <option value="">Select Race Type</option>
+                    <option value="Sprint">Sprint</option>
+                    <option value="Standard">Standard</option>
+                    <option value="Qualifying">Qualifying</option>
+                </select>
+            </div>
+            <div>
+                <label for="noOfLaps" class="block text-sm font-medium">Number of Laps</label>
+                <input type="number" id="noOfLaps" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter number of laps" min="1" required>
+            </div>
+            <div>
+                <label for="weather" class="block text-sm font-medium">Weather</label>
+                <select id="weather" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" required>
+                    <option value="">Select Weather</option>
+                    <option value="Dry">Dry</option>
+                    <option value="Wet">Wet</option>
+                    <option value="Partly Cloudy">Partly Cloudy</option>
+                    <option value="Rainy">Rainy</option>
+                </select>
+            </div>
+            <div>
+                <label for="circuitName" class="block text-sm font-medium">Circuit Name</label>
+                <input type="text" id="circuitName" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter circuit name" required>
+            </div>
+            <div>
+                <label for="grandPrixDate" class="block text-sm font-medium">Grand Prix Date</label>
+                <input type="date" id="grandPrixDate" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" required>
+            </div>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">Add Grand Prix</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('addGrandPrixForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the form from submitting the default way
+
+            // Gather input values
+            const raceName = document.getElementById('raceName').value.trim();
+            const raceType = document.getElementById('raceType').value;
+            const noOfLaps = document.getElementById('noOfLaps').value;
+            const weather = document.getElementById('weather').value;
+            const circuitName = document.getElementById('circuitName').value.trim();
+            const grandPrixDate = document.getElementById('grandPrixDate').value;
+
+            // Validate inputs
+            if (!raceName || !raceType || !noOfLaps || !weather || !circuitName || !grandPrixDate) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Create Grand Prix data object
+            const grandPrixData = {
+                Race_Name: raceName,
+                Race_Type: raceType,
+                no_of_laps: parseInt(noOfLaps), // Convert to integer
+                weather: weather,
+                Circuit_Name: circuitName,
+                Grand_Prix_Date: grandPrixDate
+            };
+
+            // Send data to backend
+            try {
+            // Send data to backend
+            const response = await fetch('http://localhost:5000/grand_prix', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(grandPrixData)
+            });
+
+            if (response.ok) {
+                alert('grand prix added successfully!');
+                document.getElementById('addGrandPrixrForm').reset();
+            } else {
+                const errorData = await response.json(); // Assuming the backend sends a JSON error response
+                alert(`Error adding driver: ${errorData.message || 'Unknown error occurred.'}`);
+            }
+            } catch (error) {
+                alert(`An error occurred: ${error.message}`);
+            }
+            });
+    </script>
+</body>
+</html>

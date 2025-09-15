@@ -1,0 +1,210 @@
+<html data-bs-theme="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>F1 Database</title>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .feature-icon {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 0.75rem;
+        }
+        .img-fluid-custom {
+            object-fit: contain;
+            width: 100%;
+            height: auto;
+        }
+        .border-bottom-custom {
+            border-bottom: 2px solid #343a40;
+            padding-bottom: 1rem;
+        }
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+            margin-top: 0; /* optional: adjust the margin to align the dropdown menu */
+        }
+    </style>
+</head>
+<div>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img alt="F1 logo" height="30" src="F1_logo.svg" width="30"/>
+            F1 Database
+        </a>
+        <button aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarSupportedContent" data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a aria-current="page" class="nav-link active" href="#">Home</a>
+                </li>
+                <!-- Drivers Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownDrivers" role="button" data-bs-toggle="dropdown" aria-expanded="false">Drivers</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownDrivers">
+                        <li><a class="dropdown-item" href="./driver_view.html">View Drivers</a></li>
+                        <li><a class="dropdown-item" href="./driver_add.html">Add Driver</a></li>
+                        <!-- <li><a class="dropdown-item" href="./driver_edit.html">Edit Driver</a></li>
+                        <li><a class="dropdown-item" href="./driver_delete.html">Delete Driver</a></li>
+                        <li><a class="dropdown-item" href="driver_standings.html">Driver Standings</a></li>
+                        <li><a class="dropdown-item" href="driver_history.html">Driver History</a></li>
+                        <li><a class="dropdown-item" href="driver_stats.html">Driver Stats</a></li> -->
+                    </ul>
+                </li>
+                <!-- Grand Prix Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownGrandPrix" role="button" data-bs-toggle="dropdown" aria-expanded="false">Grand Prix</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownGrandPrix">
+                        <li><a class="dropdown-item" href="./grand_prix_view.html">View Grand Prix</a></li>
+                        <li><a class="dropdown-item" href="./grand_prix_add.html">Add Grand Prix</a></li>
+                        <!-- <li><a class="dropdown-item" href="grandprix_edit.html">Edit Grand Prix</a></li>
+                        <li><a class="dropdown-item" href="grandprix_delete.html">Delete Grand Prix</a></li>
+                        <li><a class="dropdown-item" href="grandprix_results.html">Grand Prix Results</a></li>
+                        <li><a class="dropdown-item" href="grandprix_history.html">Grand Prix History</a></li>
+                        <li><a class="dropdown-item" href="grandprix_stats.html">Grand Prix Stats</a></li> -->
+                    </ul>
+                </li>
+                <!-- Teams Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownTeams" role="button" data-bs-toggle="dropdown" aria-expanded="false">Teams</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownTeams">
+                        <li><a class="dropdown-item" href="./team_view.html">View Teams</a></li>
+                        <li><a class="dropdown-item" href="./team_add.html">Add Team</a></li>
+                        <!-- <li><a class="dropdown-item" href="team_edit.html">Edit Team</a></li>
+                        <li><a class="dropdown-item" href="team_delete.html">Delete Team</a></li>
+                        <li><a class="dropdown-item" href="team_standings.html">Team Standings</a></li>
+                        <li><a class="dropdown-item" href="team_stats.html">Team Stats</a></li> -->
+                    </ul>
+                </li>
+                <!-- Circuit Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCircuits" role="button" data-bs-toggle="dropdown" aria-expanded="false">Circuits</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownCircuits">
+                        <li><a class="dropdown-item" href="circuit_view.html">View Circuits</a></li>
+                        <li><a class="dropdown-item" href="./circuit_add.html">Add Circuit</a></li>
+                        <!-- <li><a class="dropdown-item" href="circuit_edit.html">Edit Circuit</a></li>
+                        <li><a class="dropdown-item" href="circuit_delete.html">Delete Circuit</a></li>
+                        <li><a class="dropdown-item" href="circuit_history.html">Circuit History</a></li> -->
+                    </ul>
+                </li>
+                <!-- Race Results Dropdown -->
+                
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="px-4 pt-5 my-5 text-center border-bottom-custom">
+    <h1 class="display-4 fw-bold text-body-emphasis">Explore F1 Racing Data</h1>
+    <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">Dive into the world of Formula 1 with detailed data on drivers, teams, races, and results. Track the performance of your favorite drivers and teams across seasons.</p>
+    </div>
+    <div class="overflow-hidden" style="max-height: 30vh;">
+        <div class="container px-5">
+            <img alt="A thrilling F1 race in action with cars speeding on the track" class="img-fluid" src="f1_race.jpg"/>
+        </div>
+    </div>
+</div>
+<div class="container px-4 py-5" id="featured-3">
+    <h2 class="pb-2 border-bottom">Why Follow F1 with Us?</h2>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+        <div class="feature col">
+            <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                <img alt="Icon representing driver stats" class="img-fluid-custom" height="64" src="https://storage.googleapis.com/a1aa/image/URAepu2V86zxZCtfprzSCbgpblfuelRZnNjBiIzfcoZktyEeE.jpg" width="64"/>
+            </div>
+            <h3 class="fs-2 text-body-emphasis">Driver Stats</h3>
+            <p>Get comprehensive data on every F1 driver, including wins, podium finishes, and fastest laps. Track the progress of rising stars and legends alike.</p>
+            <a class="icon-link" href="./driver_edit.html">Explore Drivers <svg class="bi"><use xlink:href="#chevron-right"></use></svg></a>
+        </div>
+        <div class="feature col">
+            <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                <img alt="Icon representing team insights" class="img-fluid-custom" height="64" src="https://storage.googleapis.com/a1aa/image/eWWuPZ4fhiugU0XruHXAphPbv4H2LLbrepnVeGwsDNketyEeE.jpg" width="64"/>
+            </div>
+            <h3 class="fs-2 text-body-emphasis">Team Insights</h3>
+            <p>Analyze the performance of F1 teams throughout the season. Compare constructor points and learn more about each team’s approach to success.</p>
+            <a class="icon-link" href="#">View Teams <svg class="bi"><use xlink:href="#chevron-right"></use></svg></a>
+        </div>
+        <div class="feature col">
+            <div class="feature-icon d-inline-flex align-items-center justify-content-center text-bg-primary bg-gradient fs-2 mb-3">
+                <img alt="Icon representing race circuits" class="img-fluid-custom" height="64" src="https://storage.googleapis.com/a1aa/image/olZPehtuPMWxIq4YreFICTGPDHDduWij0HBOmqEPpZtrVmwTA.jpg" width="64"/>
+            </div>
+            <h3 class="fs-2 text-body-emphasis">Race Circuits</h3>
+            <p>Learn about each Grand Prix circuit, including track details, lap records, and memorable races held at iconic locations.</p>
+            <a class="icon-link" href="#">Discover Circuits <svg class="bi"><use xlink:href="#chevron-right"></use></svg></a>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div id="carouselExampleIndicators" class="carousel slide">
+      <div class="carousel-indicators">
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"
+          aria-current="true" aria-label="Slide 1"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
+          aria-label="Slide 2"></button>
+        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
+          aria-label="Slide 3"></button>
+      </div>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="./grid.jpg" class="d-block w-100" alt="couple">
+        </div>
+        <div class="carousel-item">
+          <img src="./perez.jpg" class="d-block w-100" alt="dog">
+        </div>
+        <div class="carousel-item">
+          <img src="./ferrari.jpg" class="d-block w-100" alt="family">
+        </div>
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+        data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="container">
+    <footer class="row row-cols-1 row-cols-sm-2 row-cols-md-5 py-5 my-5 border-top">
+        <div class="col mb-3">
+            <a class="d-flex align-items-center mb-3 link-body-emphasis text-decoration-none" href="/">
+                <svg class="bi me-2" height="32" width="40">
+                    <use xlink:href="#bootstrap"></use>
+                </svg>
+            </a>
+            <p class="text-body-secondary">© 2024 F1 Database</p>
+        </div>
+        <div class="col mb-3">
+            <h5>Quick Links</h5>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                    <a class="nav-link p-0 text-body-secondary" href="#">Home</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link p-0 text-body-secondary" href="#">Drivers</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link p-0 text-body-secondary" href="#">Teams</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link p-0 text-body-secondary" href="#">Circuits</a>
+                </li>
+                <li class="nav-item mb-2">
+                    <a class="nav-link p-0 text-body-secondary" href="#">Contact Us</a>
+                </li>
+            </ul>
+        </div>
+    </footer>
+</div>
+<script crossorigin="anonymous" integrity="sha384-qLWRcUFQwZj5d7zKxMEF4L+JpZfM2KNbtTrbdQt7HxOuYNw3+U7+hLNSc+PnH92l" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

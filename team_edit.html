@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Team</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto mt-10">
+        <h1 class="text-3xl font-bold mb-6">Edit Team</h1>
+        <form id="editTeamForm" class="space-y-4">
+            <div>
+                <label for="teamName" class="block font-bold">Team Name:</label>
+                <input type="text" readonly="true" id="teamName" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" required>
+            </div>
+            <div>
+                <label for="engineName" class="block font-bold">Engine Name:</label>
+                <input type="text" id="engineName" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" required>
+            </div>
+            <div>
+                <label for="numChampionships" class="block font-bold">Number of Championships:</label>
+                <input type="number" id="numChampionships" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" required>
+            </div>
+            
+            <div>
+                <label for="teamPrincipal" class="block font-bold">Team Principal:</label>
+                <input type="text" id="teamPrincipal" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" required>
+            </div>
+            <div>
+                <label for="teamPoints" class="block font-bold">Championship Points:</label>
+                <input type="number" id="teamPoints" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" required>
+            </div>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">Save Changes</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                // Retrieve the selected team name from local storage
+                const currentTeamName = localStorage.getItem('selectedTeamName');
+               
+                if (!currentTeamName) {
+                    alert('No team selected');
+                    window.location.href = 'team_view.html'; // Adjust the URL as necessary
+                    return;
+                }
+
+                // Fetch team details
+                const response = await fetch(`http://localhost:5000/team/${currentTeamName}`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch team details');
+                }
+                const team = await response.json();
+               
+                // Populate form fields
+                document.getElementById('teamName').value = team.Team_Name;
+                document.getElementById('engineName').value = team.Engine_Name;
+                document.getElementById('numChampionships').value = team.no_of_championships;
+        
+                document.getElementById('teamPrincipal').value = team.Team_Principal;
+                document.getElementById('teamPoints').value = team.Team_Points;
+
+                // Handle form submission
+                document.getElementById('editTeamForm').addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    await updateTeam(currentTeamName);
+                });
+            } catch (error) {
+                console.error('Error fetching team details:', error);
+                alert('Failed to load team details');
+                window.location.href = 'team_view.html'; // Adjust the URL as necessary
+            }
+        });
+
+        // Update team function
+        async function updateTeam(teamName) {
+            const updatedTeam = {
+                Team_Name: document.getElementById('teamName').value,
+                Engine_Name: document.getElementById('engineName').value,
+                no_of_championships: parseInt(document.getElementById('numChampionships').value),
+                Team_Principal: parseInt(document.getElementById('teamPrincipal').value),
+                Team_Points: parseInt(document.getElementById('teamPoints').value),
+                
+            };
+            try {
+                const response = await fetch(`http://localhost:5000/team/${teamName}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedTeam),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to update team');
+                }
+
+                alert('Team updated successfully');
+                window.location.href = 'team_view.html'; // Adjust the URL as necessary
+            } catch (error) {
+                console.error('Error updating team:', error);
+                alert('Failed to update team. Please try again later.');
+            }
+        }
+    </script>
+</body>
+</html>

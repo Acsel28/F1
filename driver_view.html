@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Stats</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto mt-10">
+        <h1 class="text-3xl font-bold mb-6">Driver Stats</h1>
+       
+        <!-- Search Bar and Filter Form -->
+        <div class="mb-6 space-y-4">
+            <div class="flex space-x-4">
+                <input type="text" id="searchName" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" placeholder="Search by Name">
+                <input type="text" id="searchNationality" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" placeholder="Enter Nationality">
+                
+            </div>
+           
+            <!-- Points, Wins, and Podiums Filters -->
+            <div class="flex space-x-4">
+                <div class="flex items-center space-x-2">
+                    <label class="font-bold">Points:</label>
+                    <input type="number" id="minPoints" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" placeholder="Min">
+                    <input type="number" id="maxPoints" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" placeholder="Max">
+                </div>
+                
+                <div class="flex items-center space-x-2">
+                    <label class="font-bold">Podiums:</label>
+                    <input type="number" id="minPodiums" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" placeholder="Min">
+                    <input type="number" id="maxPodiums" class="bg-gray-800 border border-gray-600 rounded-md py-2 px-4 text-white" placeholder="Max">
+                </div>
+            </div>
+
+            <button onclick="filterDrivers()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">Filter</button>
+        </div>
+
+        <div id="driverStats" class="space-y-4">
+            <!-- Dynamic driver data will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        let drivers = [];
+
+        // Fetch driver data from the API
+        async function fetchDrivers() {
+            try {
+                const response = await fetch('http://localhost:5000/driver');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                drivers = await response.json();
+                displayDrivers(drivers);
+            } catch (error) {
+                console.error('Error fetching driver data:', error);
+                alert('Failed to fetch driver data. Please try again later.');
+            }
+        }
+
+        // Display driver data
+        function displayDrivers(filteredDrivers) {
+            const driverStatsDiv = document.getElementById('driverStats');
+            driverStatsDiv.innerHTML = '';
+
+            filteredDrivers.forEach(driver => {
+                const driverDiv = document.createElement('div');
+                driverDiv.classList.add('bg-gray-800', 'p-4', 'rounded-md', 'mb-4');
+                driverDiv.innerHTML = `
+                    <h2 class="text-xl font-bold">${driver.Name}</h2>
+                    <p>Nationality: ${driver.Nationality}</p>
+                    <p>Championship Points: ${driver.Championship_Points}</p>
+                    <p>Podiums: ${driver.no_of_podiums}</p>
+                    <div class="flex space-x-2 mt-2">
+                        <button onclick="editDriver('${driver.Name}')" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded-md">Edit</button>
+                        <button onclick="deleteDriver('${driver.Name}')" class="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-2 rounded-md">Delete</button>
+                    </div>
+                `;
+                driverStatsDiv.appendChild(driverDiv);
+            });
+        }
+
+        // Filter function based on search input and filters
+        async function filterDrivers() {
+            const filters = {
+                name: document.getElementById('searchName').value,
+                nationality: document.getElementById('searchNationality').value,
+                minPoints: document.getElementById('minPoints').value,
+                maxPoints: document.getElementById('maxPoints').value,
+                minPodiums: document.getElementById('minPodiums').value,
+                maxPodiums: document.getElementById('maxPodiums').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:5000/driver/filter', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(filters)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch filtered data');
+                }
+
+                const filteredDrivers = await response.json();
+                displayDrivers(filteredDrivers);
+            } catch (error) {
+                console.error('Error filtering driver data:', error);
+                alert('Failed to filter driver data. Please try again later.');
+            }
+        }
+
+        // Initial fetch of driver data
+        document.addEventListener('DOMContentLoaded', fetchDrivers);
+    </script>
+</body>
+</html>

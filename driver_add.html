@@ -1,0 +1,78 @@
+<html>
+<head>
+    <title>Add New Driver</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto mt-10">
+        <h1 class="text-3xl font-bold mb-6">Add New Driver</h1>
+        <form class="space-y-4" id="addDriverForm">
+            <div>
+                <label for="firstName" class="block text-sm font-medium">First Name</label>
+                <input type="text" id="firstName" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter first name" required>
+            </div>
+            <div>
+                <label for="lastName" class="block text-sm font-medium">Last Name</label>
+                <input type="text" id="lastName" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter last name" required>
+            </div>
+            <div>
+                <label for="nationality" class="block text-sm font-medium">Nationality</label>
+                <input type="text" id="nationality" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter nationality" required>
+            </div>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">Add Driver</button>
+        </form>
+    </div>
+    <script>
+        document.getElementById('addDriverForm').addEventListener('submit', async function(event) {
+            event.preventDefault(); // Prevent the form from submitting the default way
+
+            // Gather input values
+            const firstName = document.getElementById('firstName').value;
+            console.log(firstName);
+            const lastName = document.getElementById('lastName').value;
+            console.log(lastName);
+            const nationality = document.getElementById('nationality').value;
+            console.log(nationality);
+            //const dob = document.getElementById('dob').value; // You might want to format this
+            //const teamId = document.getElementById('teamId').value;
+
+            // Create driver data object
+            const driverData = {
+                name: `${firstName} ${lastName}`, // Combine first and last names
+                nationality: nationality,
+                championship_points: 0, // Assuming default points for a new driver
+                no_of_podiums: 0, // Assuming default podiums for a new driver
+            };
+
+            // Send data to backend
+            try {
+            // Send data to backend
+            const response = await fetch('http://localhost:5000/driver', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(driverData)
+            });
+
+            if (response.ok) {
+                alert('Driver added successfully!');
+                document.getElementById('addDriverForm').reset();
+            } else {
+                const errorData = await response.json(); // Assuming the backend sends a JSON error response
+                alert(`Error adding driver: ${errorData.message || 'Unknown error occurred.'}`);
+            }
+            } catch (error) {
+                alert(`An error occurred: ${error.message}`);
+            }
+            });
+    </script>
+</body>
+</html>

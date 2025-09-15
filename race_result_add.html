@@ -1,0 +1,87 @@
+<html>
+<head>
+    <title>Add New Race Result</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto mt-10">
+        <h1 class="text-3xl font-bold mb-6">Add New Race Result</h1>
+        <form class="space-y-4" id="addRaceResultForm">
+            <div>
+                <label for="points" class="block text-sm font-medium">Points</label>
+                <input type="number" id="points" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter points" required>
+            </div>
+            <div>
+                <label for="DOTD" class="block text-sm font-medium">Driver of the Day</label>
+                <input type="text" id="DOTD" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter Driver of the Day" required>
+            </div>
+            <div>
+                <label for="fastestLap" class="block text-sm font-medium">Fastest Lap</label>
+                <input type="text" id="fastestLap" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter Fastest Lap" required>
+            </div>
+            <div>
+                <label for="raceName" class="block text-sm font-medium">Race Name</label>
+                <input type="text" id="raceName" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter Race Name" required>
+            </div>
+            <div>
+                <label for="driverName" class="block text-sm font-medium">Driver Name</label>
+                <input type="text" id="driverName" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter Driver Name" required>
+            </div>
+            <div>
+                <label for="teamName" class="block text-sm font-medium">Team Name</label>
+                <input type="text" id="teamName" class="mt-1 block w-full bg-gray-800 border border-gray-700 rounded-md py-2 px-3 text-white" placeholder="Enter Team Name" required>
+            </div>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md">Add Race Result</button>
+        </form>
+    </div>
+    
+    <script>
+        document.getElementById('addRaceResultForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+    
+            const points = document.getElementById('points').value;
+            const DOTD = document.getElementById('DOTD').value;
+            const fastestLap = document.getElementById('fastestLap').value;
+            const raceName = document.getElementById('raceName').value;
+            const driverName = document.getElementById('driverName').value;
+            const teamName = document.getElementById('teamName').value;
+    
+            const raceResultData = {
+                points: points,
+                DOTD: DOTD,
+                fastestLap: fastestLap,
+                raceName: raceName,
+                driverName: driverName,
+                teamName: teamName
+            };
+    
+            try {
+                const response = await fetch('http://localhost:5000/race_result', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(raceResultData)
+                });
+    
+                if (response.ok) {
+                    alert('Race Result added successfully!');
+                    document.getElementById('addRaceResultForm').reset();
+                } else {
+                    const errorData = await response.json();
+                    alert(`Error adding Race Result: ${errorData.message || 'Unknown error occurred.'}`);
+                }
+            } catch (error) {
+                alert(`An error occurred: ${error.message}`);
+            }
+        });
+    </script>
+</body>
+</html>
